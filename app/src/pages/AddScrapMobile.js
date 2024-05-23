@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Layout from "../components/Layout/Layout";
 import TextField from '@mui/material/TextField';
@@ -6,22 +6,20 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import { useSession } from "../globalStates/session.state";
 import { useNavigate } from "react-router-dom";
-import SignatureCanvas from 'react-signature-canvas';
 
-const AssignedMobile = () => {
+const AddScrapMobile = () => {
     const navigate = useNavigate();
     const [sessionState, sessionAction] = useSession();
     const [formData, setFormData] = useState({
         model: '',
-        condition: '', 
         imei: '',
         serial_number: '',
         comment: '',
         assignedTo: '',
-        mobileHistory: sessionState.name
+        created_at: new Date().toISOString().split('T')[0],  // Assuming you want the current date for creation
+        scrapedDate: new Date().toISOString().split('T')[0],  // Assuming you want the current date for scrap
     });
     const [userOptions, setUserOptions] = useState([]);
-    const signatureCanvasRef = useRef(null);
 
     useEffect(() => {
         if (!sessionState.name) {
@@ -51,40 +49,32 @@ const AssignedMobile = () => {
         }
     };
 
-    const handleClearSignature = () => {
-        signatureCanvasRef.current.clear();
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const signatureData = signatureCanvasRef.current.toDataURL();
-            const formDataWithSignature = { ...formData, signature: signatureData };
-    
             const response = await axios.post(
-                'api/addAssignedMobile.php', 
-                formDataWithSignature,
+                'api/addScrapMobile.php',  // Adjust your API endpoint accordingly
+                formData,
                 {
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 }
             );
-    
-            console.log('Form Data Submitted:', formDataWithSignature);
-    
+
+            console.log('Form Data Submitted:', formData);
+
             if (response.data.success) {
                 alert('Submission Successful');
                 setFormData({
                     model: '',
-                    condition: '', 
                     imei: '',
                     serial_number: '',
                     comment: '',
                     assignedTo: '',
-                    mobileHistory: sessionState.name
+                    created_at: new Date().toISOString().split('T')[0],  // Reset to current date
+                    scrapedDate: new Date().toISOString().split('T')[0],  // Reset to current date
                 });
-                signatureCanvasRef.current.clear();
             } else if (response.data.error) {
                 alert('Submission Failed: ' + response.data.error);
             }
@@ -94,12 +84,11 @@ const AssignedMobile = () => {
         }
     };
 
-    const models = ['Samsung A54', 'iPhone SE', 'Samsung A53', 'Samsung Tab S8', 'Samsung A55', 'Samsung S24', 'Samsung S23'];
-    const conditions = ['New', 'Used'];
+const models = ['Samsung A54', 'iPhone SE', 'Samsung A53', 'Samsung Tab S8', 'Samsung A55', 'Samsung S24', 'Samsung S23'];
 
     return (
         <Layout>
-            <h1 className="text-center font-semibold p-3 text-4xl">Assign mobile</h1>
+            <h1 className="text-center font-semibold p-3 text-4xl">Scraped Mobile</h1>
             <div className="flex justify-center">
                 <form onSubmit={handleSubmit} className="w-full max-w-lg">
                     <div className="w-full px-3 mb-6">
@@ -113,7 +102,7 @@ const AssignedMobile = () => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Assigned To"
+                                    label="Last Assigned To"
                                     variant="outlined"
                                     fullWidth
                                 />
@@ -134,26 +123,6 @@ const AssignedMobile = () => {
                                     label="Model"
                                     variant="outlined"
                                     name="model"
-                                    fullWidth
-                                    required
-                                />
-                            )}
-                        />
-                    </div>
-                    <div className="w-full px-3 mb-6">
-                        <Autocomplete
-                            freeSolo
-                            options={conditions}
-                            value={formData.condition}
-                            onChange={(event, newValue) => {
-                                handleChange(event, newValue, 'condition');
-                            }}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Condition"
-                                    variant="outlined"
-                                    name="condition"
                                     fullWidth
                                     required
                                 />
@@ -194,15 +163,35 @@ const AssignedMobile = () => {
                             fullWidth
                         />
                     </div>
-                    <div className="w-full px-3">
-                        <SignatureCanvas
-                            ref={signatureCanvasRef}
-                            penColor="black"
-                            canvasProps={{ width: 300, height: 150, className: 'signature-canvas border-2 border-black' }}
+                    <div className="w-full px-3 mb-6">
+                        <TextField
+                            label="Created At"
+                            type="date"
+                            variant="outlined"
+                            name="created_at"
+                            value={formData.created_at}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
                         />
-                        <Button variant="contained" onClick={handleClearSignature}>
-                            Clear
-                        </Button>
+                    </div>
+                    <div className="w-full px-3 mb-6">
+                        <TextField
+                            label="Scraped Date"
+                            type="date"
+                            variant="outlined"
+                            name="scrapedDate"
+                            value={formData.scrapedDate}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
                     </div>
                     <div className="flex justify-center mt-6 mb-6">
                         <Button variant="contained" type="submit" color="primary">
@@ -215,4 +204,4 @@ const AssignedMobile = () => {
     );
 }
 
-export default AssignedMobile;
+export default AddScrapMobile;

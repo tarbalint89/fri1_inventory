@@ -53,7 +53,7 @@ const Dashboard = () => {
 
     return (
         <Layout>
-            <div className="flex flex-wrap justify-center -mx-4">
+            <div className="flex flex-wrap justify-center  ">
                 {/* Detail Column */}
                 <div className="w-full md:w-1/3 px-4 py-8 bg-gray-100 rounded-lg ">
                     <div className="mb-4  text-lg bg-[#a0f630] text-white p-4 rounded-lg">

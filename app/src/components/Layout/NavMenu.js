@@ -57,14 +57,14 @@ const NavMenu = () => {
       onClose={() => sessionAction.setVar("open", false)}
       PaperProps={{
         style: {
-          height: "calc(100% - 64px)",
+          height: "calc(100%)",
           top: 64,
           width: 350
         },
       }}
       slotProps={{
         backdrop: {
-          style: { top: 64, height: "calc(100vh - 4px)" },
+          style: { top: 64, height: "calc(100vh )" },
         }
       }}
       sx={{ top: 64, height: "calc(100vh - 64px)" }}

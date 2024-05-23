@@ -34,6 +34,8 @@ try {
         $user_data = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
         $data["name"] = $user_data["name"];
 
+        $_SESSION["user_id"] = $user_data["id"];
+
         sqlsrv_free_stmt($stmt);
 
     } else {

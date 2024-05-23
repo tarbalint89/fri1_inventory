@@ -9,6 +9,7 @@ import AssignedMobile from './pages/AssignedMobile';
 import Details from './pages/Details ';
 import EditMobile from './pages/EditMobile';
 import ScrapMobiles from './pages/ScrapMobiles';
+import AddScrapMobile from './pages/AddScrapMobile';
 import Cookies from "js-cookie";
 
 
@@ -72,6 +73,7 @@ function App() {
                     <Route path="/history" element={<History></History>} />
                     <Route path="/scrapMobiles" element={<ScrapMobiles></ScrapMobiles>} />
                     <Route path="/assignedMobile" element={<AssignedMobile></AssignedMobile>} />
+                    <Route path="/addscrapmobile" element={<AddScrapMobile></AddScrapMobile>} />
                     <Route path="/" element={sessionState.name ? <HomePage /> : <LoginPage />} />
                 </Routes>
             </LangProvider>

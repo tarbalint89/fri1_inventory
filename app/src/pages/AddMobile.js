@@ -87,7 +87,7 @@ const AddMobile = () => {
     };
 
     // Define the models array for suggestions
-    const models = ['Sumsung A54', 'Iphone SE', 'Sumsung A53', 'Sumsung Tab S8'];
+    const models = ['Samsung A54', 'iPhone SE', 'Samsung A53', 'Samsung Tab S8', 'Samsung A55', 'Samsung S24', 'Samsung S23'];
     const conditions = ['New', 'Used'];
 
     return (
