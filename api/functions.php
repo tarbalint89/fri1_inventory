@@ -1,19 +1,19 @@
 <?php
 require_once __DIR__ . "/vendor/autoload.php";
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+if(!getenv("DB_HOST")){
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+}
 
 
-
-function createConnection($dbHost = null, $dbUser = null, $dbPwd = null, $dbName = null)
+function createConnection($dbHost = null, $dbUser = null, $dbPwd = null)
 {
-    $dbHost = $dbHost ?: $_ENV["DB_HOST"];
-    $dbUser = $dbUser ?: $_ENV["DB_USER"];
-    $dbPwd = $dbPwd ?: $_ENV["DB_PWD"];
-    $dbName = $dbName ?: $_ENV["DB_NAME"];
+    $dbHost = getenv("DB_HOST") ?: $_ENV["DB_HOST"] ?: null;
+    $dbUser = getenv("DB_USER") ?: $_ENV["DB_USER"] ?: null;
+    $dbPwd = getenv("DB_PWD") ?: $_ENV["DB_PWD"] ?: null;
 
-    $connInfo = array("UID" => $dbUser, "PWD" => $dbPwd,"Database" => $dbName,"CharacterSet" => "UTF-8");
+    $connInfo = array("UID" => $dbUser, "PWD" => $dbPwd,"Database" => "fri1_inventory","CharacterSet" => "UTF-8");
 
     $conn = sqlsrv_connect($dbHost, $connInfo);
 
